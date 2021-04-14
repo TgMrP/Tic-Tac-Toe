@@ -12,7 +12,7 @@ type HomeProps = {
 
 export default function Home({ navigation }: HomeProps): ReactElement {
   const singlePlayer = () => {
-    alert(1);
+    navigation.navigate("SinglePlayerGame");
   };
 
   return (
