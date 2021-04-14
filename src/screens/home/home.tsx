@@ -1,8 +1,8 @@
 import React, { ReactElement } from "react";
-import { Text, Button, ScrollView } from "react-native";
+import { ScrollView, Image, View, TouchableOpacity } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParams } from "@config/navigator";
-
+import { Button } from "@components";
 import styles from "./home.styles";
 import { GradientBackground } from "@components";
 
@@ -11,16 +11,20 @@ type HomeProps = {
 };
 
 export default function Home({ navigation }: HomeProps): ReactElement {
+    const singlePlayer = () => {
+        alert(1);
+    };
+
     return (
         <GradientBackground>
             <ScrollView contentContainerStyle={styles.container}>
-                <Text>Home</Text>
-                <Button
-                    title="Game"
-                    onPress={() => {
-                        navigation.navigate("Game", { gameId: "1" });
-                    }}
-                />
+                <Image source={require("@assets/Logo.png")} style={styles.logo} />
+                <View style={styles.buttons}>
+                    <Button style={styles.button} title="Single Player" onPress={singlePlayer} />
+                    <Button style={styles.button} title="Multiplayer" />
+                    <Button style={styles.button} title="Login" />
+                    <Button style={styles.button} title="Settings" />
+                </View>
             </ScrollView>
         </GradientBackground>
     );
