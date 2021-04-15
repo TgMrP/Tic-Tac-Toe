@@ -4,6 +4,8 @@ import Text from "../text/text";
 import { BoardState, BoardResult } from "@utils";
 import BoardLine from "./board-line";
 
+import styles from "./board.style";
+
 type BoardProps = {
   state: BoardState;
   size: number;
@@ -21,13 +23,13 @@ export default function Board({
 }: BoardProps): ReactElement {
   return (
     <View
-      style={{
-        width: size,
-        height: size,
-        backgroundColor: "green",
-        flexDirection: "row",
-        flexWrap: "wrap"
-      }}
+      style={[
+        styles.board,
+        {
+          width: size,
+          height: size
+        }
+      ]}
     >
       {state.map((cell, index) => {
         return (
@@ -35,16 +37,9 @@ export default function Board({
             disabled={cell !== null || disabled}
             onPress={() => onCellPressed && onCellPressed(index)}
             key={index}
-            style={{
-              width: "33.333333%",
-              height: "33.333333%",
-              backgroundColor: "white",
-              borderWidth: 1,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
+            style={[styles.cell, styles[`cell${index}` as "cell"]]}
           >
-            <Text style={{ fontSize: size / 8 }}>{cell}</Text>
+            <Text style={[styles.cellText, { fontSize: size / 7 }]}>{cell}</Text>
           </TouchableOpacity>
         );
       })}
