@@ -1,12 +1,12 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { SafeAreaView, Dimensions, View } from "react-native";
+import { SafeAreaView, Dimensions, View, Platform } from "react-native";
 
 import { Board, Button, GradientBackground, Text } from "@components";
 import { BoardState, isTerminal, getBestMove, isEmpty, Cell, UseSounds } from "@utils";
 
 import styles from "./single-player-game.styles";
 
-const SCREEN_WIDTH = Dimensions.get("screen").width;
+const SIZE = Platform.OS === "web" ? Dimensions.get("screen").width * 0.3 : Dimensions.get("screen").width - 60;
 
 export default function SinglePlayerGame(): ReactElement {
   // prettier-ignore
@@ -115,7 +115,7 @@ export default function SinglePlayerGame(): ReactElement {
           }}
           state={state}
           gameResult={gameResult}
-          size={SCREEN_WIDTH - 60}
+          size={SIZE}
         />
         {gameResult && (
           <View style={styles.modal}>
