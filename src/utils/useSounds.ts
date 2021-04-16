@@ -3,10 +3,12 @@ import { Platform } from "react-native";
 
 import { Audio } from "expo-av";
 import * as Haptics from "expo-haptics";
+import { useSettings } from "@contexts/settings-context";
 
 type SoundType = "pop1" | "pop2" | "win" | "loss" | "draw";
 
 export default function useSounds(): (sound: SoundType) => void {
+  const { settings } = useSettings();
   const popSoundRef = useRef<Audio.Sound | null>(null);
   const pop2SoundRef = useRef<Audio.Sound | null>(null);
   const winSoundRef = useRef<Audio.Sound | null>(null);
@@ -23,8 +25,8 @@ export default function useSounds(): (sound: SoundType) => void {
     };
     try {
       const status = await soundsMap[sound].current?.getStatusAsync();
-      status && status.isLoaded && soundsMap[sound].current?.replayAsync();
-      if (Platform.OS !== "web") {
+      status && status.isLoaded && settings?.sounds && soundsMap[sound].current?.replayAsync();
+      if (Platform.OS !== "web" && settings?.haptics) {
         switch (sound) {
           case "pop1":
           case "pop2":

@@ -5,11 +5,88 @@ import { GradientBackground, Text } from "@components";
 import styles from "./settings.styles";
 import { colors } from "@utils";
 
-export default function settings(): ReactElement | null {
+import { difficulties, useSettings } from "@contexts/settings-context";
+import { StackNavigatorParams } from "@config/navigator";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+type SettingsScreenNavigationProp = StackNavigationProp<StackNavigatorParams, "Settings">;
+
+type SettingsProps = {
+  navigation: SettingsScreenNavigationProp;
+};
+
+export default function settings({ navigation }: SettingsProps): ReactElement | null {
+  const { settings, saveSetting } = useSettings();
+
+  if (!settings) return null;
+
   return (
     <GradientBackground>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.label}>Bot Difficulty</Text>
+        <View style={styles.field}>
+          <Text style={styles.label}>Bot Difficulty</Text>
+          <View style={styles.choices}>
+            {Object.keys(difficulties).map(level => {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    saveSetting("difficulty", level as keyof typeof difficulties);
+                  }}
+                  style={[
+                    styles.choice,
+                    {
+                      backgroundColor: settings.difficulty === level ? colors.lightPurple : colors.lightGreen
+                    }
+                  ]}
+                  key={level}
+                >
+                  <Text
+                    style={[
+                      styles.choiceText,
+                      {
+                        color: settings.difficulty === level ? colors.lightGreen : colors.darkPurple
+                      }
+                    ]}
+                  >
+                    {difficulties[level as keyof typeof difficulties]}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+
+        <View style={[styles.field, styles.switchField]}>
+          <Text style={styles.label}>Sounds</Text>
+          <Switch
+            trackColor={{
+              false: colors.purple,
+              true: colors.lightPurple
+            }}
+            thumbColor={colors.lightGreen}
+            ios_backgroundColor={colors.purple}
+            value={settings.sounds}
+            onValueChange={() => {
+              saveSetting("sounds", !settings.sounds);
+            }}
+          />
+        </View>
+
+        <View style={[styles.field, styles.switchField]}>
+          <Text style={styles.label}>Haptics/Vibrations</Text>
+          <Switch
+            trackColor={{
+              false: colors.purple,
+              true: colors.lightPurple
+            }}
+            thumbColor={colors.lightGreen}
+            ios_backgroundColor={colors.purple}
+            value={settings.haptics}
+            onValueChange={() => {
+              saveSetting("haptics", !settings.haptics);
+            }}
+          />
+        </View>
       </ScrollView>
     </GradientBackground>
   );
